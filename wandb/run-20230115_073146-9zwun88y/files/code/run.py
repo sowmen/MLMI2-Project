@@ -46,7 +46,7 @@ print(device)
 args.device = device
 args.vocab = vocab
 
-wandb.config = vars(args)
+exit(0)
 
 model = models.BiLSTM(args.num_layers, args.fbank_dims * args.concat, args.model_dims, len(args.vocab))
 num_params = sum(p.numel() for p in model.parameters())
@@ -67,11 +67,3 @@ model.eval()
 model.to(device)
 results = decode(model, args, args.test_json)
 print("SUB: {:.2f}%, DEL: {:.2f}%, INS: {:.2f}%, COR: {:.2f}%, PER: {:.2f}%".format(*results))
-
-wandb.log({
-    "Test SUB": results[0],
-    "Test DEL": results[1],
-    "Test INS": results[2],
-    "Test COR": results[3],
-    "Test PER": results[4]                  
-})

@@ -1,5 +1,7 @@
 from datetime import datetime
 from pathlib import Path
+import wandb
+import tqdm
 
 import torch
 from torch.nn import CTCLoss
@@ -46,6 +48,11 @@ def train(model, args):
             if idx % args.report_interval + 1 == args.report_interval:
                 last_loss = running_loss / args.report_interval
                 print('  batch {} loss: {}'.format(idx + 1, last_loss))
+                wandb.log({
+                    "train_batch_loss": last_loss,
+                    "epoch": epoch,
+                    "train_batch": idx+1
+                })
                 tb_x = epoch * len(train_loader) + idx + 1
                 running_loss = 0.
         return last_loss
@@ -81,6 +88,11 @@ def train(model, args):
         print('LOSS train {:.5f} valid {:.5f}, valid PER {:.2f}%'.format(
             avg_train_loss, avg_val_loss, val_decode[4])
             )
+        wandb.log({
+            "avg_train_loss": avg_train_loss,
+            "avg_valid_loss": avg_val_loss,
+            "valid PER": val_decode[4]
+        })
 
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss

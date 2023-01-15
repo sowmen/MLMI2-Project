@@ -8,6 +8,9 @@ from decoder import decode
 import numpy as np
 import argparse
 
+import wandb
+wandb.init(project="MLMI2-Project", entity="sdipto")
+
 parser = argparse.ArgumentParser(description = 'Running MLMI2 experiments')
 
 # set arguments for training and decoding. 
@@ -21,7 +24,7 @@ parser.add_argument('--fbank_dims', type=int, default=23, help="filterbank dimen
 parser.add_argument('--model_dims', type=int, default=128, help="model size for rnn layers")
 parser.add_argument('--concat', type=int, default=1, help="concatenating frames")
 parser.add_argument('--lr', type=float, default=0.5, help="learning rate")
-parser.add_argument('--vocab', type=str, default="vocab.txt", help="vocabulary file path")
+parser.add_argument('--vocab', type=str, default="vocab_39.txt", help="vocabulary file path")
 parser.add_argument('--report_interval', type=int, default=50, help="report interval during training")
 parser.add_argument('--num_epochs', type=int, default=20)
 args = parser.parse_args()
@@ -38,8 +41,12 @@ else:
     device = "cpu"
 
 print(args)
+print(device)
+
 args.device = device
 args.vocab = vocab
+
+exit(0)
 
 model = models.BiLSTM(args.num_layers, args.fbank_dims * args.concat, args.model_dims, len(args.vocab))
 num_params = sum(p.numel() for p in model.parameters())

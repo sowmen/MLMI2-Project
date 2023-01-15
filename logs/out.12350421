@@ -1,0 +1,42 @@
+Namespace(seed=123, train_json='train_fbank.json', val_json='dev_fbank.json', test_json='test_fbank.json', batch_size=4, num_layers=1, fbank_dims=23, model_dims=128, concat=1, lr=0.5, vocab='vocab_39.txt', report_interval=50, num_epochs=20)
+cpu
+Total number of model parameters is 166952
+EPOCH 1:
+  batch 50 loss: 4.184001474380493
+  batch 100 loss: 3.2000190782547
+  batch 150 loss: 3.0724602365493774
+  batch 200 loss: 2.939737567901611
+  batch 250 loss: 2.8579511404037476
+  batch 300 loss: 2.6904921913146973
+  batch 350 loss: 2.5111969470977784
+  batch 400 loss: 2.49439998626709
+  batch 450 loss: 2.395169768333435
+  batch 500 loss: 2.18699613571167
+  batch 550 loss: 2.11634566783905
+  batch 600 loss: 2.0516827440261842
+  batch 650 loss: 1.9526558136940002
+  batch 700 loss: 1.9597755408287048
+  batch 750 loss: 1.888747158050537
+  batch 800 loss: 1.8711730718612671
+  batch 850 loss: 1.799785692691803
+  batch 900 loss: 1.7762992238998414
+LOSS train 1.77630 valid 1.79753, valid PER 67.82%
+EPOCH 2:
+  batch 50 loss: 1.726043267250061
+  batch 100 loss: 1.6724355959892272
+  batch 150 loss: 1.650956518650055
+  batch 200 loss: 1.6425951218605042
+  batch 250 loss: 1.6769547057151795
+  batch 300 loss: 1.60871972322464
+  batch 350 loss: 1.520490083694458
+  batch 400 loss: 1.532741951942444
+  batch 450 loss: 1.4663445472717285
+  batch 500 loss: 1.5009061908721923
+  batch 550 loss: 1.5100911855697632
+  batch 600 loss: 1.4516446828842162
+  batch 650 loss: 1.4895513153076172
+  batch 700 loss: 1.4574075269699096
+  batch 750 loss: 1.4223734426498413
+  batch 800 loss: 1.3608790159225463
+  batch 850 loss: 1.374633753299713
+  batch 900 loss: 1.399652144908905

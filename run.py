@@ -9,7 +9,6 @@ import numpy as np
 import argparse
 
 import wandb
-wandb.init(project="MLMI2-Project", entity="sdipto")
 
 parser = argparse.ArgumentParser(description = 'Running MLMI2 experiments')
 
@@ -27,6 +26,9 @@ parser.add_argument('--lr', type=float, default=0.5, help="learning rate")
 parser.add_argument('--vocab', type=str, default="vocab_39.txt", help="vocabulary file path")
 parser.add_argument('--report_interval', type=int, default=50, help="report interval during training")
 parser.add_argument('--num_epochs', type=int, default=20)
+parser.add_argument('--dropout_prob', type=float, default=0.4)
+parser.add_argument('--clip_norm', type=float, default=1.0)
+parser.add_argument('--schedule', type=str, default="false")
 args = parser.parse_args()
 
 
@@ -46,9 +48,10 @@ print(device)
 args.device = device
 args.vocab = vocab
 
-wandb.config = vars(args)
+wandb.init(project="MLMI2-Project", entity="sdipto", name=f"Hyp+Num2+512+Unidirection")
+wandb.config.update(args)
 
-model = models.BiLSTM(args.num_layers, args.fbank_dims * args.concat, args.model_dims, len(args.vocab))
+model = models.BiLSTM(args.num_layers, args.fbank_dims * args.concat, args.model_dims, len(args.vocab), args.dropout_prob)
 num_params = sum(p.numel() for p in model.parameters())
 print('Total number of model parameters is {}'.format(num_params))
 

@@ -1,3 +1,4 @@
 fbanks
 checkpoints
 logs/machine.file.*
+wandb

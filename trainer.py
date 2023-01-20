@@ -7,7 +7,8 @@ import torch
 from torch.nn import CTCLoss
 from torch.nn.utils.rnn import pad_sequence
 from torch.nn.functional import log_softmax
-from torch.optim import SGD
+from torch.optim import SGD, Adam
+from torch.optim.lr_scheduler import ReduceLROnPlateau
 from decoder import decode
 from utils import concat_inputs
 
@@ -19,6 +20,8 @@ def train(model, args):
     val_loader = get_dataloader(args.val_json, args.batch_size, False)
     criterion = CTCLoss(zero_infinity=True)
     optimiser = SGD(model.parameters(), lr=args.lr)
+    # optimiser = Adam(model.parameters(), lr=args.lr)
+    scheduler = ReduceLROnPlateau(optimiser, 'min', factor=0.5, patience=0)
 
     def train_one_epoch(epoch):
         running_loss = 0.
@@ -42,6 +45,8 @@ def train(model, args):
             loss = criterion(outputs, targets, in_lens, out_lens)
             loss.backward()
 
+            if args.clip_norm > 0.1:
+                torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=args.clip_norm, norm_type=2)
             optimiser.step()
 
             running_loss += loss.item()
@@ -63,6 +68,10 @@ def train(model, args):
 
     for epoch in range(args.num_epochs):
         print('EPOCH {}:'.format(epoch + 1))
+        wandb.log({
+            'lr': optimiser.param_groups[0]['lr']
+        })
+
         model.train(True)
         avg_train_loss = train_one_epoch(epoch)
 
@@ -98,4 +107,8 @@ def train(model, args):
             best_val_loss = avg_val_loss
             model_path = 'checkpoints/{}/model_{}'.format(timestamp, epoch + 1)
             torch.save(model.state_dict(), model_path)
+
+        if args.schedule == "true":
+            scheduler.step(avg_val_loss)
+        
     return model_path
